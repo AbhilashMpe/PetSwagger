@@ -1,0 +1,389 @@
+{
+	"info": {
+		"_postman_id": "427526c8-12bd-405f-8401-d23c275ded74",
+		"name": "Pet_Swagger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19374438"
+	},
+	"item": [
+		{
+			"name": "PETS",
+			"item": [
+				{
+					"name": "New_Pet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var no = Math.random ()\r",
+									"id = no * 1000\r",
+									"console.log (id)\r",
+									"pm.collectionVariables.set (\"id1\",Math.floor (id))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responsebody = pm.response.json ()\r",
+									"\r",
+									"pm.test (\"status should have 200\", function (){\r",
+									"    pm.response.to.have.status (200)\r",
+									"})\r",
+									"pm.test (\"repsonse should be 1000ms\", function (){\r",
+									"  pm.expect(pm.response.responseTime).to.be.below (1000)\r",
+									"  pm.collectionVariables.set (\"petid\",responsebody.id)\r",
+									"})\r",
+									"pm.test(\"equality assertion\", function (){\r",
+									"    pm.expect(responsebody.status).to.be.equal(\"available\")\r",
+									"})\r",
+									"pm.test(\"Type assertion\", function (){\r",
+									"    pm.expect(responsebody.status).to.be.a(\"string\")\r",
+									"})\r",
+									"pm.expect (\"Existence assertion\", function (){\r",
+									"    pm.expect(responsebody.name).to.exist\r",
+									"})\r",
+									"pm.expect(\"chaining assertion\", function(){\r",
+									"    pm.expect(responsebody.status).to.exist.and.to.be.equal(\"available\").and.to.be.a (\"string\")\r",
+									"})\r",
+									"pm.test (\"inclusion Assertion\", function (){\r",
+									"    pm.expect(responsebody.status).to.include ('ble')\r",
+									"})\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{id1}},\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"doggie\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}"
+						},
+						"url": "https://petstore.swagger.io/v2/pet"
+					},
+					"response": []
+				},
+				{
+					"name": "Update_Pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responsebody1 = pm.response.json()\r",
+									"pm.test(\"type assertion\", function (){\r",
+									"    pm.expect (responsebody1.message).to.be.a (\"string\");\r",
+									"})\r",
+									"pm.test(\"equality assertion\",function(){\r",
+									"    pm.expect (responsebody1.code).to.be.equal(200)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "https://petstore.swagger.io/v2/pet/{{petid}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Added_Pet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{petid}},\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"doggie\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}"
+						},
+						"url": "https://petstore.swagger.io/v2/pet"
+					},
+					"response": []
+				},
+				{
+					"name": "Find_Pet",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "{{Base_URL_PetStore}}/v2/pet/{{petid}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_Pet",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "https://petstore.swagger.io/v2/pet/{{petid}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "Place_order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"id\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"petId\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"quantity\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"shipDate\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"status\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"complete\": {\r",
+									"      \"type\": \"boolean\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"id\",\r",
+									"    \"petId\",\r",
+									"    \"quantity\",\r",
+									"    \"shipDate\",\r",
+									"    \"status\",\r",
+									"    \"complete\"\r",
+									"  ]\r",
+									"}\r",
+									"pm.test ('scehma is valid', function (){\r",
+									"    pm.expect(tv4.validate(pm.response.json(),schema)).to.be.true;\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{id}},\r\n  \"petId\": 0,\r\n  \"quantity\": 0,\r\n  \"shipDate\": \"2023-07-23T09:32:37.113Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}"
+						},
+						"url": "https://petstore.swagger.io/v2/store/order"
+					},
+					"response": []
+				},
+				{
+					"name": "Purchase_ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "https://petstore.swagger.io/v2/store/order/{{id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_Pet",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "https://petstore.swagger.io/v2/store/order/{{id}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create_User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{id}},\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"{{firstName}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"phone\": {{phone}},\r\n  \"userStatus\": {{userstatus}}\r\n}"
+						},
+						"url": "{{Base_URL_PetStore}}/v2/user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get_User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "https://petstore.swagger.io/v2/user/Abhilash"
+					},
+					"response": []
+				},
+				{
+					"name": "Update_User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"username\": \"string\",\r\n  \"firstName\": \"string\",\r\n  \"lastName\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"userStatus\": 0\r\n}"
+						},
+						"url": "https://petstore.swagger.io/v2/user/{{firstName}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": "{{Base_URL_PetStore}}/v2/user/{{firstName}}"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "id1",
+			"value": ""
+		},
+		{
+			"key": "petid",
+			"value": ""
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "phone",
+			"value": ""
+		}
+	]
+}
